@@ -7,7 +7,7 @@ import { HashRouter } from 'react-router-dom'   // ← cambiaste BrowserRouter p
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <HashRouter>                                // ← aquí también
+    <HashRouter>                               
       <App />
     </HashRouter>
   </React.StrictMode>

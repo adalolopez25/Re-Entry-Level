@@ -26,7 +26,7 @@ export default function LoginPage({ setLoggedIn }: Props) {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 via-white to-blue-100 px-4">
+    <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-blue-200 via-white to-blue-100 px-4">
       <div className="bg-white shadow-xl rounded-2xl w-full max-w-md p-8">
         <h2 className="text-3xl font-bold text-center mb-6 text-blue-600">Iniciar Sesión</h2>
 
