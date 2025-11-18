@@ -11,13 +11,15 @@ dotenv.config();
 
 const app = express();
 
-// Trust proxy (Vercel, Render)
+// Necesario en Render/Vercel
 app.set('trust proxy', 1);
 
-// CORS: permite frontend en local y producción
+// CORS: permite localhost y tu GitHub Pages
 const allowedOrigins = [
   'http://localhost:5173',
-  process.env.FRONTEND_URL || 'https://tu-app.vercel.app'
+  'https://adalolopez25.github.io',
+  'https://adalolopez25.github.io/Re-Entry-Level',
+  'https://adalolopez25.github.io/Re-Entry-Level/'
 ];
 
 app.use(
@@ -36,17 +38,17 @@ app.use(
 app.use(express.json());
 app.use(logger);
 
-// SESIÓN SEGURA
+// Sesión segura (funciona en localhost y producción)
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'fallback-secret-change-in-prod',
+    secret: process.env.SESSION_SECRET || 'fallback-secret-muy-inseguro-cambiar-ya',
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 1000 * 60 * 60 * 24, // 24h
+      secure: process.env.NODE_ENV === 'production',   // true en Render
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 1000 * 60 * 60 * 24, //  // 24 horas
     },
   })
 );
@@ -55,22 +57,23 @@ app.use(
 app.use('/api/users', userRoutes);
 
 // Health check
-app.get('/health', (req, res) => res.json({ status: 'OK', time: new Date() }));
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', time: new Date() });
+});
 
 const PORT = process.env.PORT || 3000;
 
 AppDataSource.initialize()
   .then(() => {
-    console.log(process.env.DB_USER)
     console.log('Base de datos conectada');
     app.listen(PORT, () => {
-      console.log(`Servidor en http://localhost:${PORT}`);
+      console.log(`Servidor corriendo en puerto ${PORT}`);
       if (process.env.RENDER_EXTERNAL_URL) {
         console.log(`URL pública: ${process.env.RENDER_EXTERNAL_URL}`);
       }
     });
   })
   .catch((err) => {
-    console.error('Error de DB:', err);
+    console.error('Error conectando a la base de datos:', err);
     process.exit(1);
   });
